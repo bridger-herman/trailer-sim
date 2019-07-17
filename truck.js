@@ -3,7 +3,8 @@ import { Matrix2x2 } from './mat.js'
 const TRANSLATE_AMOUNT = 10;
 const ROTATE_AMOUNT = Math.PI/24;
 const TRUCK_ROTATE_GAIN = 0.10;
-const TRAILER_ROTATE_GAIN = 0.10;
+const TRAILER_ROTATE_GAIN = 0.98;
+const TRAILER_ROTATE_DRAG = 0.05;
 
 function init() {
   // Construct the truck
@@ -27,15 +28,19 @@ function init() {
   $(window).on('keydown', (evt) => {
     switch (evt.key) {
       case 'w':
+      case 'ArrowUp':
         transformTruck(true);
         break;
       case 'a':
+      case 'ArrowLeft':
         turnWheels(false);
         break;
       case 's':
+      case 'ArrowDown':
         transformTruck(false);
         break;
       case 'd':
+      case 'ArrowRight':
         turnWheels(true);
         break;
       default:
@@ -45,8 +50,10 @@ function init() {
 }
 
 function transformTruck(forward) {
-  // Transform the truck
+  // Transform the truck based on steer wheel rotation
   let truckMat = new Matrix2x2($('#truck').css('transform'));
+  let oldTruckAngle = truckMat.angle;
+
   let wheelAngle = new Matrix2x2($('.wheel.front').css('transform')).angle *
     TRUCK_ROTATE_GAIN;
   if (forward) {
@@ -59,8 +66,12 @@ function transformTruck(forward) {
 
   // Move the trailer based on truck movement
   let trailerMat = new Matrix2x2($('#trailer').css('transform'));
-  let truckAngle = truckMat.angle;
-  trailerMat.angle = -truckAngle;
+  let newTruckAngle = truckMat.angle;
+  let rotateForce = TRAILER_ROTATE_GAIN * (oldTruckAngle - newTruckAngle);
+  let centeringForce = -trailerMat.angle * TRAILER_ROTATE_DRAG;
+  centeringForce = forward ? centeringForce : -centeringForce;
+  trailerMat.rotate(rotateForce + centeringForce);
+
   $('#trailer').css('transform', trailerMat.getCssString());
 }
 
