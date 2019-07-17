@@ -1,3 +1,40 @@
+#trailer {
+  position: absolute;
+  width: 100px;
+  height: 400px;
+  left: 50%;
+  top: calc(50% + 130px);
+  border: 1px solid black;
+  border-radius: 5px;
+  transform: matrix(1, 0, 0, 1, 0, 0);
+  transform-origin: 50% calc(60% + 65px);
+  background-color: white;
+  z-index: 1;
+}
+
+.trailer-wheel {
+  position: absolute;
+  background-color: black;
+  height: 40px;
+  width: 15px;
+}
+
+.trailer-wheel.front {
+  top: 60%;
+}
+.trailer-wheel.mid {
+  top: calc(60% + 45px);
+}
+.trailer-wheel.rear {
+  top: calc(60% + 90px);
+}
+.trailer-wheel.left {
+  left: -7px;
+}
+.trailer-wheel.right {
+  left: calc(100% - 7px);
+}
+
 #truck {
   position: absolute;
   left: 50%;

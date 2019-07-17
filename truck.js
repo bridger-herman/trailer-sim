@@ -13,6 +13,15 @@ function init() {
       $('<div/>', {class: 'wheel rear left'}),
       $('<div/>', {class: 'wheel rear right'}),
     )
+  ).append(
+    $('<div/>', {id: 'trailer'}).append(
+      $('<div/>', {class: 'trailer-wheel front left'}),
+      $('<div/>', {class: 'trailer-wheel mid left'}),
+      $('<div/>', {class: 'trailer-wheel rear left'}),
+      $('<div/>', {class: 'trailer-wheel front right'}),
+      $('<div/>', {class: 'trailer-wheel mid right'}),
+      $('<div/>', {class: 'trailer-wheel rear right'}),
+    )
   );
 
   $(window).on('keydown', (evt) => {
