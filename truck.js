@@ -3,6 +3,7 @@ import { Matrix2x2 } from './mat.js'
 const TRANSLATE_AMOUNT = 10;
 const ROTATE_AMOUNT = Math.PI/24;
 const TRUCK_ROTATE_GAIN = 0.10;
+const TRAILER_ROTATE_GAIN = 0.10;
 
 function init() {
   // Construct the truck
@@ -12,8 +13,6 @@ function init() {
       $('<div/>', {class: 'wheel front right'}),
       $('<div/>', {class: 'wheel rear left'}),
       $('<div/>', {class: 'wheel rear right'}),
-    )
-  ).append(
     $('<div/>', {id: 'trailer'}).append(
       $('<div/>', {class: 'trailer-wheel front left'}),
       $('<div/>', {class: 'trailer-wheel mid left'}),
@@ -21,6 +20,7 @@ function init() {
       $('<div/>', {class: 'trailer-wheel front right'}),
       $('<div/>', {class: 'trailer-wheel mid right'}),
       $('<div/>', {class: 'trailer-wheel rear right'}),
+    )
     )
   );
 
@@ -45,16 +45,23 @@ function init() {
 }
 
 function transformTruck(forward) {
-  let mat = new Matrix2x2($('#truck').css('transform'));
+  // Transform the truck
+  let truckMat = new Matrix2x2($('#truck').css('transform'));
   let wheelAngle = new Matrix2x2($('.wheel.front').css('transform')).angle *
     TRUCK_ROTATE_GAIN;
   if (forward) {
-    mat.rotate(wheelAngle);
+    truckMat.rotate(wheelAngle);
   } else {
-    mat.rotate(-wheelAngle);
+    truckMat.rotate(-wheelAngle);
   }
-  mat.translateWithAngle(forward ? -TRANSLATE_AMOUNT : TRANSLATE_AMOUNT);
-  $('#truck').css('transform', mat.getCssString());
+  truckMat.translateWithAngle(forward ? -TRANSLATE_AMOUNT : TRANSLATE_AMOUNT);
+  $('#truck').css('transform', truckMat.getCssString());
+
+  // Move the trailer based on truck movement
+  let trailerMat = new Matrix2x2($('#trailer').css('transform'));
+  let truckAngle = truckMat.angle;
+  trailerMat.angle = -truckAngle;
+  $('#trailer').css('transform', trailerMat.getCssString());
 }
 
 function turnWheels(right) {

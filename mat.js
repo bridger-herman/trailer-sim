@@ -1,5 +1,6 @@
 export class Matrix2x2 {
   constructor(cssString) {
+    // CSS matrix(a, b, c, d, x, y)
     let contents = cssString.substring(cssString.indexOf('(') + 1).replace(')', '');
     contents = contents.split(', ');
     this.x = parseFloat(contents[4]);

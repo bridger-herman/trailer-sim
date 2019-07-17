@@ -2,12 +2,11 @@
   position: absolute;
   width: 100px;
   height: 400px;
-  left: 50%;
-  top: calc(50% + 130px);
+  top: 120px;
   border: 1px solid black;
   border-radius: 5px;
   transform: matrix(1, 0, 0, 1, 0, 0);
-  transform-origin: 50% calc(60% + 65px);
+  transform-origin: 50% 40px;
   background-color: white;
   z-index: 1;
 }
