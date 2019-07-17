@@ -6,6 +6,7 @@
   width: 100px;
   border: 1px solid black;
   border-radius: 5px;
+  transform: matrix(1, 0, 0, 1, 0, 0);
 }
 
 .wheel {
