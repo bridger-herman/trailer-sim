@@ -1,0 +1,30 @@
+#truck {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 200px;
+  width: 100px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.wheel {
+  position: absolute;
+  background-color: black;
+  height: 50px;
+}
+.wheel.left {
+  left: -5px;
+}
+.wheel.front {
+  top: 15px;
+  width: 25px;
+}
+.wheel.right {
+  left: calc(100% - 20px);
+}
+.wheel.rear {
+  top: calc(100% - 65px);
+  width: 50px;
+  transform: translate(-12.5px, 0);
+}
