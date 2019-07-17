@@ -4,7 +4,7 @@ const TRANSLATE_AMOUNT = 10;
 const ROTATE_AMOUNT = Math.PI/24;
 const TRUCK_ROTATE_GAIN = 0.10;
 const TRAILER_ROTATE_GAIN = 0.98;
-const TRAILER_ROTATE_DRAG = 0.05;
+const TRAILER_ROTATE_DRAG = 0.04;
 
 function init() {
   // Construct the truck
@@ -24,6 +24,23 @@ function init() {
     )
     )
   );
+
+  // Construct the parking lot
+  for (let i = 0; i < 13; i++) {
+    $('#parking-lot').append($('<div/>', {
+      class: 'line vert-line',
+      css: {
+        'left': i * 110,
+        'top': 200,
+      }
+    }));
+  }
+  $('#parking-lot').append($('<div/>', {
+    class: 'line horiz-line',
+    css: {
+      'top': 390,
+    }
+  }));
 
   $(window).on('keydown', (evt) => {
     switch (evt.key) {
@@ -50,8 +67,15 @@ function init() {
 }
 
 function transformTruck(forward) {
-  // Transform the truck based on steer wheel rotation
   let truckMat = new Matrix2x2($('#truck').css('transform'));
+  let trailerMat = new Matrix2x2($('#trailer').css('transform'));
+
+  if (Math.abs(trailerMat.angle) > Math.PI/2) {
+    $('header').append($('<p/>', {text: 'You jackknifed'}));
+    return;
+  }
+
+  // Transform the truck based on steer wheel rotation
   let oldTruckAngle = truckMat.angle;
 
   let wheelAngle = new Matrix2x2($('.wheel.front').css('transform')).angle *
@@ -62,22 +86,26 @@ function transformTruck(forward) {
     truckMat.rotate(-wheelAngle);
   }
   truckMat.translateWithAngle(forward ? -TRANSLATE_AMOUNT : TRANSLATE_AMOUNT);
-  $('#truck').css('transform', truckMat.getCssString());
 
   // Move the trailer based on truck movement
-  let trailerMat = new Matrix2x2($('#trailer').css('transform'));
   let newTruckAngle = truckMat.angle;
   let rotateForce = TRAILER_ROTATE_GAIN * (oldTruckAngle - newTruckAngle);
   let centeringForce = -trailerMat.angle * TRAILER_ROTATE_DRAG;
   centeringForce = forward ? centeringForce : -centeringForce;
   trailerMat.rotate(rotateForce + centeringForce);
 
+  $('#truck').css('transform', truckMat.getCssString());
   $('#trailer').css('transform', trailerMat.getCssString());
 }
 
 function turnWheels(right) {
   let mat = new Matrix2x2($('.wheel.front').css('transform'));
   mat.rotate(right ? -ROTATE_AMOUNT : ROTATE_AMOUNT);
+  if (mat.angle > Math.PI/4) {
+    mat.angle = Math.PI/4;
+  } else if (mat.angle < -Math.PI/4) {
+    mat.angle = -Math.PI/4;
+  }
   $('.wheel.front').css('transform', mat.getCssString());
 }
 
