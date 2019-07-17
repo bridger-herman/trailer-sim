@@ -20,6 +20,7 @@
 .wheel.front {
   top: 15px;
   width: 25px;
+  transform: matrix(1, 0, 0, 1, 0, 0);
 }
 .wheel.right {
   left: calc(100% - 20px);

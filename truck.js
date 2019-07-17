@@ -1,6 +1,7 @@
 import { Matrix2x2 } from './mat.js'
 
-const MOVE_AMOUNT = 10;
+const TRANSLATE_AMOUNT = 10;
+const ROTATE_AMOUNT = Math.PI/24;
 
 function init() {
   // Construct the truck
@@ -19,11 +20,13 @@ function init() {
         transformTruck(true);
         break;
       case 'a':
+        turnWheels(false);
         break;
       case 's':
         transformTruck(false);
         break;
       case 'd':
+        turnWheels(true);
         break;
       default:
         break;
@@ -32,14 +35,15 @@ function init() {
 }
 
 function transformTruck(forward) {
-  let tf = $('#truck').css('transform');
-  let mat = new Matrix2x2(tf);
-  mat.translate(0, forward ? -MOVE_AMOUNT : MOVE_AMOUNT);
-  console.log(tf);
-  console.log(mat);
-  console.log(mat.getCssString());
+  let mat = new Matrix2x2($('#truck').css('transform'));
+  mat.translate(0, forward ? -TRANSLATE_AMOUNT : TRANSLATE_AMOUNT);
   $('#truck').css('transform', mat.getCssString());
-  console.log($('#truck').css('transform'));
+}
+
+function turnWheels(right) {
+  let mat = new Matrix2x2($('.wheel.front').css('transform'));
+  mat.rotate(right ? -ROTATE_AMOUNT : ROTATE_AMOUNT);
+  $('.wheel.front').css('transform', mat.getCssString());
 }
 
 window.onload = init;
