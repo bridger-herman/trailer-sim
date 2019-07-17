@@ -2,6 +2,7 @@ import { Matrix2x2 } from './mat.js'
 
 const TRANSLATE_AMOUNT = 10;
 const ROTATE_AMOUNT = Math.PI/24;
+const TRUCK_ROTATE_GAIN = 0.10;
 
 function init() {
   // Construct the truck
@@ -36,7 +37,14 @@ function init() {
 
 function transformTruck(forward) {
   let mat = new Matrix2x2($('#truck').css('transform'));
-  mat.translate(0, forward ? -TRANSLATE_AMOUNT : TRANSLATE_AMOUNT);
+  let wheelAngle = new Matrix2x2($('.wheel.front').css('transform')).angle *
+    TRUCK_ROTATE_GAIN;
+  if (forward) {
+    mat.rotate(wheelAngle);
+  } else {
+    mat.rotate(-wheelAngle);
+  }
+  mat.translateWithAngle(forward ? -TRANSLATE_AMOUNT : TRANSLATE_AMOUNT);
   $('#truck').css('transform', mat.getCssString());
 }
 

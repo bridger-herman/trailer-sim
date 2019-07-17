@@ -18,6 +18,12 @@ export class Matrix2x2 {
     this.angle += angle;
   }
 
+  translateWithAngle(forwardAmount) {
+    // X and Y are flipped because truck starts facing up, not right
+    this.x += forwardAmount * Math.sin(this.angle);
+    this.y += forwardAmount * Math.cos(this.angle);
+  }
+
   getCssString() {
     let c = Math.cos(this.angle);
     let s = Math.sin(this.angle);
