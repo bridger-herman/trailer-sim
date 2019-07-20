@@ -3,8 +3,8 @@ import { Matrix2x2 } from './mat.js'
 const TRANSLATE_AMOUNT = 10;
 const ROTATE_AMOUNT = Math.PI/24;
 const TRUCK_ROTATE_GAIN = 0.10;
-const TRAILER_ROTATE_GAIN = 0.98;
-const TRAILER_ROTATE_DRAG = 0.04;
+const TRAILER_ROTATE_GAIN = 0.99;
+const TRAILER_CENTERING = 0.04;
 
 function init() {
   // Construct the truck
@@ -90,7 +90,7 @@ function transformTruck(forward) {
   // Move the trailer based on truck movement
   let newTruckAngle = truckMat.angle;
   let rotateForce = TRAILER_ROTATE_GAIN * (oldTruckAngle - newTruckAngle);
-  let centeringForce = -trailerMat.angle * TRAILER_ROTATE_DRAG;
+  let centeringForce = -trailerMat.angle * TRAILER_CENTERING;
   centeringForce = forward ? centeringForce : -centeringForce;
   trailerMat.rotate(rotateForce + centeringForce);
 
